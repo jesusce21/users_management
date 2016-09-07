@@ -1,0 +1,14 @@
+{% extends 'basic.html' %}
+{% block title %}
+    Tests
+{% endblock %}
+
+{% block content %}
+    <h1>Hi {{ username }}</h1>
+    <form action="{% url 'change_data' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit" />
+    </form>
+
+{% endblock %}
