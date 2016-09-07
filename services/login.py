@@ -55,6 +55,17 @@ def change_data(request):
         return redirect(ROOT_PATH)
 
 
+@login_obligatorio
+def logout(request):
+    form = UserForm()
+    min_param = {"STATIC_URL": STATIC_URL}
+    if request.session.get('session'):
+        for key in request.session.keys():
+            del request.session[key]
+    min_param.update({"form": form})
+    return redirect(ROOT_PATH)
+
+
 # ONLY FOR DRY
 def _get_user(request, min_param, type='POST'):
     qry_input = {"username": getattr(request, type).get('username')}

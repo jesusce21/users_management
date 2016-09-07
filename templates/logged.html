@@ -2,7 +2,9 @@
 {% block title %}
     Tests
 {% endblock %}
-
+{% block logout %}
+    <a href="{% url 'logout' %}">Logout</a>
+{% endblock %}
 {% block content %}
     <h1>Hi {{ username }}</h1>
     <form action="{% url 'change_data' %}" method="post">
