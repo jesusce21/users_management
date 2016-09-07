@@ -1,0 +1,36 @@
+{% extends 'basic_logged.html' %}
+{% block title %}
+    ADMINISTRATION
+{% endblock %}
+{% block content %}
+    <table class="table table-bordered table-responsive">
+        <thead>
+            <tr>
+                <td>TYPE(*)</td>
+                <td>NAME(*)</td>
+                <td>LABEL</td>
+                <td>PLACEHOLDER</td>
+                <td>HELP_TEXT</td>
+                <td>REQUIRED</td>
+                <td>OPTION</td>
+            </tr>
+        </thead>
+        <tbody>
+        {% for field in scheme %}
+            <tr>
+                <td>{{ field.type }}</td>
+                <td>{{ field.name }}</td>
+                <td>{{ field.label }}</td>
+                <td>{{ field.placeholder }}</td>
+                <td>{{ field.help_text }}</td>
+                <td>{{ field.required }}</td>
+                <td>{{ field.option }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+
+
+{% endblock %}

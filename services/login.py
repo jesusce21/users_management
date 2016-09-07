@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from users_management.configuration.config import ROOT_PATH, def_form
+from users_management.configuration.config import ROOT_PATH, def_form, ADMIN
 
 from services.utils import _get_scheme, _check_field_value, \
     _update_attr_dict, _alpha_num
@@ -49,7 +49,7 @@ def change_data(request):
                 form = DinamicForm(fields, request.POST)
 
         data = dict(username=qry_input.get('username'), form=form, **min_param)
-        return render(request, 'logged.html', data)
+        return render(request, 'user_profile.html', data)
 
     else:
         return redirect(ROOT_PATH)
@@ -79,10 +79,16 @@ def _get_user(request, min_param, type='POST'):
         request.session.set_expiry(300)
 
         fields = _get_scheme(def_form.get("user_profile"))
-        data = {"username": qry_input.get('username'),
-                "form": DinamicForm(fields, qry.get().data)}
-        data.update(min_param)
-        return render(request, 'logged.html', data)
+        data = dict(username=qry_input.get('username'),
+                    **min_param)
+        if qry.get().rol == ADMIN:
+            template = 'admin_configuration.html'
+            data["scheme"] = fields
+        else:
+            template = 'user_profile.html'
+            data["form"] = DinamicForm(fields, qry.get().data)
+
+        return render(request, template, data)
 
     else:
         return False

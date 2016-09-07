@@ -11,4 +11,5 @@ class user(models.Model):
     id = models.IntegerField(primary_key=True, db_index=True)
     username = models.CharField(max_length=70)
     password = models.CharField(max_length=40)
+    rol = models.IntegerField(default=2)
     data = JSONField()
