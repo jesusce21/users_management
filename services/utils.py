@@ -1,6 +1,7 @@
 from django import forms
 from django.utils.safestring import mark_safe
 from users_management.models import scheme
+from users_management.configuration.config import json_scheme
 import random
 
 
@@ -32,19 +33,7 @@ def _scheme_to_form(field):
     # IF FIELD NOT CONTAINT VALUE, THE TYPE DEFAULT IS STRING
     type_field = field.get("type", "string").lower()
 
-    # STRUCTURE FOR DJANGO FORM
-    types = {"int": {"field": "IntegerField", "input": "TextInput"},
-             "boolean": {"field": "BooleanField", "input": "CheckboxInput"},
-             "select": {"field": "ChoiceField", "input": "option"},
-             "float": {"field": "FloatField", "input": "TextInput"},
-             "time": {"field": "TimeField", "input": "TimeInput"},
-             "date": {"field": "DateField", "input": "DateInput"},
-             "datetime": {"field": "DateTimeField", "input": "DateTimeInput"},
-             "long_string": {"field": "CharField", "input": "Textarea"},
-             "string": {"field": "CharField", "input": "TextInput"},
-             }
-
-    type_structure = types.get(type_field, types.get("string"))
+    type_structure = json_scheme.get(type_field, json_scheme.get("string").get("structure")).get("structure")
     help_text = mark_safe(field.get('help_text')) if field.get('help') else None
 
 

@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from users_management.configuration.config import ROOT_PATH, def_form, ADMIN
+from users_management.configuration.config import ROOT_PATH, def_form, ADMIN, \
+    json_scheme
 
 from services.utils import _get_scheme, _check_field_value, \
     _update_attr_dict, _alpha_num
@@ -82,8 +83,10 @@ def _get_user(request, min_param, type='POST'):
         data = dict(username=qry_input.get('username'),
                     **min_param)
         if qry.get().rol == ADMIN:
-            template = 'admin_configuration.html'
+            template = "admin_configuration.html"
             data["scheme"] = fields
+            data["types"] = json_scheme.keys()
+            data["option_types"] = "s"
         else:
             template = 'user_profile.html'
             data["form"] = DinamicForm(fields, qry.get().data)
