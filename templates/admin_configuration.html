@@ -13,24 +13,40 @@
                 <td>HELP_TEXT</td>
                 <td>REQUIRED</td>
                 <td>OPTION</td>
+                <td>DELETE</td>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="table_body">
         {% for field in scheme %}
             <tr>
-                <td>{{ field.type }}</td>
-                <td>{{ field.name }}</td>
-                <td>{{ field.label }}</td>
-                <td>{{ field.placeholder }}</td>
-                <td>{{ field.help_text }}</td>
-                <td>{{ field.required }}</td>
-                <td>{{ field.option }}</td>
+                <td class="_type">{{ field.type }}</td>
+                <td class="_name">{{ field.name }}</td>
+                <td class="_label">{{ field.label }}</td>
+                <td class="_placeholder">{{ field.placeholder }}</td>
+                <td class="_help_text">{{ field.help_text }}</td>
+                <td class="_required">{{ field.required }}</td>
+                <td class="_option">{{ field.option }}</td>
+                <td><span class="glyphicon glyphicon-minus delete_row" aria-hidden="true"></span></td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+    <span id="add_row" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 
+    <script>
+        $( document ).ready(function() {
+            row = '<tr><td></td><td></td><td></td><td></td><td></td><td></td>' +
+                  '<td></td><td><span class="glyphicon glyphicon-minus ' +
+                  'delete_row" aria-hidden="true"></span></td></tr>';
+            $('#add_row').on('click', function(){
+                $('#table_body').append(row);
+            });
 
-
+            // This method work with new append
+            $(document).on("click", '.delete_row', function(){
+                $(this).closest('tr').remove();
+            });
+        });
+    </script>
 
 {% endblock %}
