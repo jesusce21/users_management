@@ -3,6 +3,12 @@
     ADMINISTRATION
 {% endblock %}
 {% block content %}
+    <style>
+    input{
+        /* It isn´t responsive*/
+        width: 60%;
+    }
+    </style>
     <table class="table table-bordered table-responsive">
         <thead>
             <tr>
@@ -17,33 +23,59 @@
             </tr>
         </thead>
         <tbody id="table_body">
-        {% for field in scheme %}
-            <tr>
-                <td class="_type">{{ field.type }}</td>
-                <td class="_name">{{ field.name }}</td>
-                <td class="_label">{{ field.label }}</td>
-                <td class="_placeholder">{{ field.placeholder }}</td>
-                <td class="_help_text">{{ field.help_text }}</td>
-                <td class="_required">{{ field.required }}</td>
-                <td class="_option">{{ field.option }}</td>
-                <td><span class="glyphicon glyphicon-minus delete_row" aria-hidden="true"></span></td>
-            </tr>
-        {% endfor %}
+            <form action="" method="post" class="">
+            {% csrf_token %}
+                {% for field in forms %}
+                    <tr>
+                        {% for attr in field %}
+                        <td class="{% cycle '_type ' '_name' '_label' '_placeholder' '_help_text' '_required' '_option' as rowcolors%}{% if rowcolors == '_type ' %}{{ attr.value }}{% endif %}">
+                            {{ attr }}
+                        </td>
+                        {% endfor %}
+                        <td><span class="glyphicon glyphicon-minus delete_row" aria-hidden="true"></span></td>
+                    </tr>
+                {% endfor %}
+                <input type="submit" value="Submit" />
+            </form>
         </tbody>
     </table>
     <span id="add_row" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 
     <script>
         $( document ).ready(function() {
-            row = '<tr><td></td><td></td><td></td><td></td><td></td><td></td>' +
-                  '<td></td><td><span class="glyphicon glyphicon-minus ' +
-                  'delete_row" aria-hidden="true"></span></td></tr>';
+            var row_id = $('#table_body tr').length;
             $('#add_row').on('click', function(){
+                row = $('#table_body tr:last').clone(true);
+                row.find("td input:text, td input:radio, td select").each(function() {
+                    id = $( this ).attr("id").replace(/\d+/,row_id);
+                    name = $( this ).attr("name").replace(/\d+/,row_id);
+                    $( this ).attr("id", id);
+                    $( this ).attr("name", name);
+                });
                 $('#table_body').append(row);
+                row_id++;
+            });
+
+            $(document).on("change", "._type", function(){
+                var node_place = $(this).siblings('._placeholder').children();
+                var node_option = $(this).siblings('._option').children();
+                c = '_type '+$(this).children().val();
+                $(this).attr('class', c);
+                if($(this).hasClass("select")){
+                    node_place.prop('disabled', true);
+                    node_option.prop('disabled', false);
+                }else if($(this).hasClass("boolean")){
+                    node_place.prop('disabled', true);
+                    node_option.prop('disabled', true);
+                }else{
+                    node_place.prop('disabled', false);
+                    node_option.prop('disabled', true);
+                }
+
             });
 
             // This method work with new append
-            $(document).on("click", '.delete_row', function(){
+            $(document).on("click", ".delete_row", function(){
                 $(this).closest('tr').remove();
             });
         });

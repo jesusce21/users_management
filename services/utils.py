@@ -44,7 +44,7 @@ def _scheme_to_form(field):
 
     if type_field != "select":
         widget = getattr(forms, type_structure.get('input'))(
-            attrs={'placeholder': field['placeholder']})
+            attrs={'placeholder': field.get('placeholder')})
         scheme_field['widget'] = widget
     else:
         scheme_field['choices'] = field.get('option', [])

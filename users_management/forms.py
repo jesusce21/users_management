@@ -13,9 +13,10 @@ class UserForm(forms.ModelForm):
         widgets = {'password': forms.PasswordInput()}
 
 class DinamicForm(forms.Form):
-    def __init__(self, fields, initial, *args, **kwargs):
+    def __init__(self, fields, initial, multi_form=None, *args, **kwargs):
         super(DinamicForm, self).__init__(*args, **kwargs)
         # GENERATE FORMS WITH INITIAL VALUE
         for field in fields:
+            name = '%s_%s' % (multi_form, field['name']) if multi_form else field['name']
             field.update({'initial': initial.get(field['name'])})
-            self.fields[field['name']] = _scheme_to_form(field)
+            self.fields[name] = _scheme_to_form(field)
