@@ -6,16 +6,20 @@ import random
 
 
 # GET THE JSON_FIELDS
-def _get_scheme(user_profile):
+def _get_scheme(user_profile, ret=False):
     qry1 = scheme.objects.filter(code=user_profile)
-    return qry1.get().data if qry1 else {}
+    return qry1 if ret else qry1.get().data if qry1 else {}
+
 
 
 # UPDATE ATTRIBUTE TYPE DICT
-def _update_attr_dict(qry, data_finish, attr):
-    update_user = qry.get()
-    getattr(update_user, attr).update(data_finish)
-    update_user.save()
+def _update_attr_dict(qry, data_finish, attr, combine=True):
+    update_data = qry.get()
+    if combine:
+        update_data.combine_data(attr, data_finish)
+    else:
+        update_data.set_data(attr, data_finish)
+    update_data.save()
 
 
 # RETURN ONLY VALUES CONTENT IN SCHEME
@@ -34,13 +38,13 @@ def _scheme_to_form(field):
     type_field = field.get("type", "string").lower()
 
     type_structure = json_scheme.get(type_field, json_scheme.get("string").get("structure")).get("structure")
-    help_text = mark_safe(field.get('help_text')) if field.get('help') else None
+    help = mark_safe(field.get('help')) if field.get('help') else None
 
 
     scheme_field = {'label': field.get('label'),
                     'initial': field.get('initial'),
-                    'help_text': help_text,
-                    'required': False if field.get('not_required') else True}
+                    'help_text': help,
+                    'required': True if field.get('required') else False}
 
     if type_field != "select":
         widget = getattr(forms, type_structure.get('input'))(

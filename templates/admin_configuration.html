@@ -9,6 +9,8 @@
         width: 60%;
     }
     </style>
+        <form action="{% url 'change_scheme' %}" method="post" class="">
+
     <table class="table table-bordered table-responsive">
         <thead>
             <tr>
@@ -23,12 +25,12 @@
             </tr>
         </thead>
         <tbody id="table_body">
-            <form action="" method="post" class="">
+
             {% csrf_token %}
                 {% for field in forms %}
                     <tr>
                         {% for attr in field %}
-                        <td class="{% cycle '_type ' '_name' '_label' '_placeholder' '_help_text' '_required' '_option' as rowcolors%}{% if rowcolors == '_type ' %}{{ attr.value }}{% endif %}">
+                        <td class="{% cycle '_type ' '_name' '_label' '_placeholder' '_help' '_required' '_option' as rowcolors%}{% if rowcolors == '_type ' %}{{ attr.value }}{% endif %}">
                             {{ attr }}
                         </td>
                         {% endfor %}
@@ -36,14 +38,44 @@
                     </tr>
                 {% endfor %}
                 <input type="submit" value="Submit" />
-            </form>
+
         </tbody>
     </table>
+    </form>
     <span id="add_row" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 
     <script>
         $( document ).ready(function() {
             var row_id = $('#table_body tr').length;
+
+            var check_type = function (node) {
+                var node_place = $(node).siblings('._placeholder').children();
+                var node_option = $(node).siblings('._option').children();
+                c = '_type '+$(node).children().val();
+                $(node).attr('class', c);
+                if($(node).hasClass("select")){
+                    node_place.prop('disabled', true);
+                    node_option.prop('disabled', false);
+                }else if($(node).hasClass("boolean")){
+                    node_place.prop('disabled', true);
+                    node_option.prop('disabled', true);
+                }else{
+                    node_place.prop('disabled', false);
+                    node_option.prop('disabled', true);
+                }
+            };
+
+            // FOR INITIAL VALUE TYPE.
+            $('#table_body tr ._type').each(function() {
+              check_type(this)
+            });
+
+            // FOR CHANGE VALUE TYPE.
+            $(document).on("change", "._type", function(){
+                check_type(this);
+            });
+
+            // NEW ROW
             $('#add_row').on('click', function(){
                 row = $('#table_body tr:last').clone(true);
                 row.find("td input:text, td input:radio, td select").each(function() {
@@ -56,28 +88,11 @@
                 row_id++;
             });
 
-            $(document).on("change", "._type", function(){
-                var node_place = $(this).siblings('._placeholder').children();
-                var node_option = $(this).siblings('._option').children();
-                c = '_type '+$(this).children().val();
-                $(this).attr('class', c);
-                if($(this).hasClass("select")){
-                    node_place.prop('disabled', true);
-                    node_option.prop('disabled', false);
-                }else if($(this).hasClass("boolean")){
-                    node_place.prop('disabled', true);
-                    node_option.prop('disabled', true);
-                }else{
-                    node_place.prop('disabled', false);
-                    node_option.prop('disabled', true);
-                }
-
-            });
-
-            // This method work with new append
+            // DELETE ROW
             $(document).on("click", ".delete_row", function(){
                 $(this).closest('tr').remove();
             });
+
         });
     </script>
 

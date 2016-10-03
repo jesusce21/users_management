@@ -5,33 +5,16 @@ ROOT_PATH = '/'
 def_form = dict(user_profile='user_profile')
 
 # STRUCTURE FOR FORM
-option_basic = {'type': 'required', 'name': 'required', 'label': 'optional',
-                'placeholder': 'optional', 'help_text': 'optional',
-                'required': 'optional'}
-option_select = {'type': 'required', 'name': 'required', 'label': 'optional',
-                 'placeholder': 'optional', 'required': 'optional',
-                 'option': 'required'}
+options_scheme = ['type', 'name', 'label', 'placeholder', 'help',
+                  'required', 'option']
 
-basic_scheme = [
-    {"name": "type", "type": "select", "label": "Type",
-     "option": [
-         ["int", "Integer"], ["boolean", "Boolean"], ["select", "Select"],
-         ["time", "Time"], ["date", "Date"], ["datetime", "Datetime"],
-         ["long_string", "Area"], ["string", "String"]
-     ]},
-    {"name": "name", "type": "string", "label": "Name",
-     "placeholder": "Define your name..."},
-    {"name": "label", "type": "string", "label": "Label",
-     "placeholder": "Define your label...", "not_required": True},
-    {"name": "placeholder", "type": "string", "label": "Placeholder",
-     "placeholder": "Define your placeholder...", "not_required": True},
-    {"name": "help_text", "type": "string", "label": "Help text",
-     "placeholder": "Define your help text...", "not_required": True},
-    {"name": "required", "type": "boolean", "label": "Required",
-     "not_required": True},
-    {"name": "option", "type": "string", "label": "Option",
-     "placeholder": "Define your option...", "not_required": True}
-]
+# THE VALUE INDICATES IF REQUIRED
+option_basic = {'type': True, 'name': True, 'label': False,
+                'placeholder': False, 'help': False,
+                'required': False}
+option_select = {'type': True, 'name': True, 'label': False,
+                 'placeholder': False, 'required': False,
+                 'option': True, 'help': False}
 
 json_scheme = {
     "int": {"structure": {"field": "IntegerField", "input": "TextInput"},
@@ -40,7 +23,7 @@ json_scheme = {
         "structure": {"field": "BooleanField", "input": "CheckboxInput"},
         "option": option_basic},
     "select": {"structure": {"field": "ChoiceField", "input": "option"},
-               "option": option_basic},
+               "option": option_select},
     "float": {"structure": {"field": "FloatField", "input": "TextInput"},
               "option": option_basic},
     "time": {"structure": {"field": "TimeField", "input": "TimeInput"},
@@ -55,6 +38,27 @@ json_scheme = {
     "string": {"structure": {"field": "CharField", "input": "TextInput"},
                "option": option_basic},
 }
+
+# BASIC SCHEME TO CHANGE JSON STRUCTURE
+basic_scheme = [
+    {"name": "type", "type": "select", "label": "Type",
+     "option": [
+         ["int", "Integer"], ["boolean", "Boolean"], ["select", "Select"],
+         ["time", "Time"], ["date", "Date"], ["datetime", "Datetime"],
+         ["long_string", "Area"], ["string", "String"]
+     ]},
+    {"name": "name", "type": "string", "label": "Name",
+     "placeholder": "Define your name...", "required": True},
+    {"name": "label", "type": "string", "label": "Label",
+     "placeholder": "Define your label..."},
+    {"name": "placeholder", "type": "string", "label": "Placeholder",
+     "placeholder": "Define your placeholder..."},
+    {"name": "help", "type": "string", "label": "Help text",
+     "placeholder": "Define your help text..."},
+    {"name": "required", "type": "boolean", "label": "Required"},
+    {"name": "option", "type": "string", "label": "Option",
+     "placeholder": "Define your option..."}
+]
 
 # ADMIN AND USERS ROL
 ADMIN = 1
