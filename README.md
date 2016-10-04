@@ -23,7 +23,7 @@ $ git clone https://github.com/jesusce21/users_management.git
 ```
 
 ### View example
-![Users management](static/image/example.gif)
+![Users management](static/image/example-v2.gif)
 
 ### Json structure
 Permitted types
