@@ -16,10 +16,11 @@ $ git clone https://github.com/jesusce21/users_management.git
 ### Test
 ```sql
 -- Insert in "users_management_scheme"
-1;"user_profile";"[{"name": "description", "type": "string", "label": "Description", "placeholder": "Define your description..."}, {"name": "type", "type": "select", "label": "Type", "option": [["1", "A"], ["3", "C"], ["4", "D"], ["5", "F"]]}]"
+1;"user_profile";"[{"help": "", "name": "name", "type": "string", "label": "Name", "required": "on", "placeholder": ""}, {"help": "", "name": "gender", "type": "select", "label": "Gender", "option": [["1", "Male"], ["3", "Female"]]}, {"help": "Write about yourself", "name": "description", "type": "long_string", "label": "Description", "placeholder": ""}, {"help": "", "name": "number_of_siblings", "type": "int", "label": "Number of siblings", "required": "on", "placeholder": ""}, {"help": "", "name": "check", "type": "boolean", "label": "I agree to terms"}]"
 
 -- Insert in "users_management_user"
-1;"admin";"admin";"{}"
+1;"admin";"admin";"{}";1;
+2;"user";"user";"{}";2;
 ```
 
 ### View example
@@ -42,4 +43,5 @@ Option for ["select"]
 ```
 
 ### Next version
-- Admin configuration: It allows the administrator to modify the json structure.
+- Frontend: Improve Interface
+- Backend:  Improve security (cypher password,...)
